@@ -1,47 +1,56 @@
 package com.example.Bible_Quiz_Api.services;
 
 import com.example.Bible_Quiz_Api.dtos.UserDto;
-import com.example.Bible_Quiz_Api.logs.UserAlreadyExistsException;
 import com.example.Bible_Quiz_Api.models.UserModel;
-import com.example.Bible_Quiz_Api.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.Bible_Quiz_Api.repositories.UserRepository; // Importando o repositório
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class AuthService {
 
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final UserRepository userRepository;  // Injeção do repositório
 
-    @Autowired
-    public AuthService(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    // Construtor para injeção do UserRepository
+    public AuthService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @Autowired
-    private UserRepository userRepository;
-
-
-    // Método para registrar o usuário no banco de dados PostgreSQL
-    public UserModel registerUser(UserDto userDto) {
-        // Verifica se o usuário já existe
+    public UserModel registerUser(@RequestBody UserDto userDto) {
+        // Verificar se o nome de usuário já existe
         if (userRepository.findByUsername(userDto.getUsername()) != null) {
-            throw new UserAlreadyExistsException("Usuário já existe");
+            throw new RuntimeException("O nome de usuário já está em uso.");
         }
 
-        // Cria um novo usuário e codifica a senha
-        UserModel user = new UserModel();
-        user.setUsername(userDto.getUsername());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        // Atribuir role com base na senha
+        String role = determineRole(userDto.getPassword());
 
-        // Atribui um papel padrão (A1) caso não tenha sido informado
-        if (userDto.getRole() == null || userDto.getRole().isEmpty()) {
-            user.setRole("A1");
+        // Criar o modelo do usuário com base nos dados recebidos
+        UserModel userModel = new UserModel();
+        userModel.setUsername(userDto.getUsername());
+        userModel.setPassword(passwordEncoder.encode(userDto.getPassword()));  // Senha criptografada
+        userModel.setRole(role);
+
+        // Log para depuração
+        System.out.println("Salvando usuário: " + userModel.getUsername());
+
+        // Salvar o usuário no banco de dados
+        userRepository.save(userModel);
+
+        return userModel;
+    }
+
+
+
+    private String determineRole(String password) {
+        if ("AuxiliarCCB".equals(password)) {
+            return "A2";
+        } else if ("CooperadorCCB".equals(password)) {
+            return "A3";
         } else {
-            user.setRole(userDto.getRole());
+            return "A1";  // Default role
         }
-
-        // Salva o usuário no banco de dados PostgreSQL
-        return userRepository.save(user);
     }
 }

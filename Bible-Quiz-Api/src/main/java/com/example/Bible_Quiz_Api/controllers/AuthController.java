@@ -3,21 +3,31 @@ package com.example.Bible_Quiz_Api.controllers;
 import com.example.Bible_Quiz_Api.dtos.UserDto;
 import com.example.Bible_Quiz_Api.models.UserModel;
 import com.example.Bible_Quiz_Api.services.AuthService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
-@Validated
+@RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
-    @PostMapping("/api/auth/register")
-    public UserModel register(@RequestBody @Valid UserDto userDto) {
-        return authService.registerUser(userDto);
+    @Autowired
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
+        try {
+            UserModel registeredUser = authService.registerUser(userDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Usuário " + registeredUser.getUsername() + " registrado com sucesso!");
+        } catch (Exception e) {
+            e.printStackTrace();  // Exibe o erro no log
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno: " + e.getMessage());
+        }
+    }
+
 }
