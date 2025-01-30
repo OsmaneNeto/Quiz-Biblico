@@ -3,9 +3,11 @@ package com.example.Bible_Quiz_Api.controllers;
 import com.example.Bible_Quiz_Api.dtos.UserDto;
 import com.example.Bible_Quiz_Api.models.UserModel;
 import com.example.Bible_Quiz_Api.services.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserDto userDto) {
         try {
             UserModel registeredUser = authService.registerUser(userDto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Usuário " + registeredUser.getUsername() + " registrado com sucesso!");

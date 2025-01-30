@@ -23,6 +23,10 @@ public class AuthService {
         if (userRepository.findByUsername(userDto.getUsername()) != null) {
             throw new RuntimeException("O nome de usuário já está em uso.");
         }
+        // Verificar se o email já está cadastrado
+        if (userRepository.findByEmail(userDto.getEmail()) != null) {
+            throw new RuntimeException("Email já está em uso.");
+        }
 
         // Atribuir role com base na senha
         String role = determineRole(userDto.getPassword());
@@ -32,6 +36,7 @@ public class AuthService {
         userModel.setUsername(userDto.getUsername());
         userModel.setPassword(passwordEncoder.encode(userDto.getPassword()));  // Senha criptografada
         userModel.setRole(role);
+        userModel.setEmail(userDto.getEmail());  // Atribuindo o email
 
         // Log para depuração
         System.out.println("Salvando usuário: " + userModel.getUsername());
