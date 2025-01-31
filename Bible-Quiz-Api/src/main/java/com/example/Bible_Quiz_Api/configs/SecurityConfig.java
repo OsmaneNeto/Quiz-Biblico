@@ -3,6 +3,7 @@ package com.example.Bible_Quiz_Api.configs;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,17 +14,20 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Configuração para permitir acesso ao registro sem autenticação e exigir autenticação para as demais rotas
         http
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/game-rooms").permitAll()  // Acesso livre à rota de game-rooms
                         .requestMatchers("/auth/register").permitAll()  // Acesso livre à rota de registro
+                        .requestMatchers("/api/game/create").permitAll()  // Permite o acesso à criação da sala de jogo sem autenticação
                         .anyRequest().authenticated()  // Exigir autenticação para outras rotas
                 )
-                .csrf(csrf -> csrf.disable());  // Desativa CSRF usando a nova sintaxe com Customizer
+                .csrf(csrf -> csrf.disable())  // Desativa CSRF usando a nova sintaxe com Customizer
+                .httpBasic(Customizer.withDefaults());  // Usa autenticação básica com o novo método
 
         return http.build();
     }
