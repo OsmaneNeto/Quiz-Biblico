@@ -1,1 +1,13 @@
-<p>quiz works!</p>
+<div class="quiz-container">
+    <div class="quiz-card">
+      <h2>Pergunta:</h2>
+      <p class="question">{{ pergunta }}</p>
+  
+      <div class="answers">
+        <button *ngFor="let resposta of respostas" class="answer-btn" (click)="verificarResposta(resposta)">
+          {{ resposta }}
+        </button>
+      </div>
+    </div>
+  </div>
+  

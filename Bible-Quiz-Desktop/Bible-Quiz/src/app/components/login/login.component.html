@@ -1,1 +1,24 @@
-<p>login works!</p>
+<div class="login-container">
+    <div class="login-card">
+      <h1>Bem-vindo ao Quiz Bíblico</h1>
+      <p class="verse">"Lâmpada para os meus pés é tua palavra, e luz para o meu caminho." - Salmos 119:105</p>
+      
+      <form (ngSubmit)="onSubmit()">
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" [(ngModel)]="email" name="email" required>
+        </div>
+        
+        <div class="input-group">
+          <label for="password">Senha</label>
+          <input type="password" id="password" [(ngModel)]="password" name="password" required>
+        </div>
+        
+        <button type="submit" class="btn">Entrar</button>
+      </form>
+      <p class="register-link">Não tem uma conta? <a routerLink="/registeruser">Cadastre-se</a></p>
+      <p class="register-link"><a routerLink="/home">Voltar</a></p>
+      
+    </div>
+  </div>
+  

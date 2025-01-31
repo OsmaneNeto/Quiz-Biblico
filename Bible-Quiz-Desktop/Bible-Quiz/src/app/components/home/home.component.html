@@ -1,10 +1,11 @@
-<h1>{{ "Home" }}</h1>
+<title>Quiz biblico</title>
+<h1>Quiz bíblico</h1>
 <nav>
-  <button routerLink="/home">Home</button>
-  <button routerLink="/login">Login</button>
-  <button routerLink="/questions">Perguntas</button>
-  <button routerLink="/quiz">Quiz</button>
-  <button routerLink="/registeruser">Cadastrar Usuário</button>
+  <button (click)="navigateTo('/login')">Login</button>
+  <button (click)="navigateTo('/registeruser')">Cadastro</button>
+  <button (click)="navigateTo('/questions')">Questions</button>
+  <button (click)="navigateTo('/quiz')">Quiz</button>
+  
 </nav>
 
 <footer>
