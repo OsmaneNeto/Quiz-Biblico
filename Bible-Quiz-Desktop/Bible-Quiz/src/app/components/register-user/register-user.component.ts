@@ -11,17 +11,25 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./register-user.component.css']
 })
 export class RegisterUserComponent {
+  username: string = '';
   email: string = '';
   password: string = '';
+  confirmPassword: string = '';
 
   onSubmit() {
-    console.log('Email:', this.email);
+    if (this.password !== this.confirmPassword) {
+      alert('As senhas não coincidem');
+      return;
+    }
+
+    console.log('Nome de usuário:', this.username);
+    console.log('E-mail:', this.email);
     console.log('Senha:', this.password);
-    // Aqui você pode adicionar lógica para autenticar o usuário
+    // Aqui você pode adicionar a lógica para enviar os dados ao backend ou algo similar
   }
 
-  // Método de navegação, mas não implementado
-  navigateTo(arg0: string) {
-    throw new Error('Method not implemented.');
+  navigateTo(route: string) {
+    // Navegar para a rota desejada
+    // Isso pode ser feito utilizando o Router do Angular
   }
 }

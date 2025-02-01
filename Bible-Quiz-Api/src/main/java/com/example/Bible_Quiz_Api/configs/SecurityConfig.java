@@ -12,6 +12,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
@@ -20,14 +25,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowCredentials(true);
+                    config.setAllowedOrigins(List.of("http://localhost:4200")); // Permitir chamadas do Angular
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+                    return config;
+                })) // Configuração de CORS
+                .csrf(csrf -> csrf.disable())  // Desativa CSRF para permitir chamadas do frontend
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/game-rooms").permitAll()  // Acesso livre à rota de game-rooms
                         .requestMatchers("/auth/register").permitAll()  // Acesso livre à rota de registro
                         .requestMatchers("/api/game/create").permitAll()  // Permite o acesso à criação da sala de jogo sem autenticação
                         .anyRequest().authenticated()  // Exigir autenticação para outras rotas
                 )
-                .csrf(csrf -> csrf.disable())  // Desativa CSRF usando a nova sintaxe com Customizer
-                .httpBasic(Customizer.withDefaults());  // Usa autenticação básica com o novo método
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
@@ -54,5 +67,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();  // Codificador de senha
+    }
+
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of("http://localhost:4200")); // Permitir chamadas do Angular
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }

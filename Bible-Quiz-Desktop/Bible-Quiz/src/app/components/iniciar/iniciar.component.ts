@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-iniciar',
@@ -8,11 +7,10 @@ import { Router } from '@angular/router';
 })
 export class IniciarComponent {
 
-  constructor(private router: Router) {}
-
-  iniciarQuiz() {
-    // Navega para o componente de quiz
-    this.router.navigate(['/quiz']);
+  // Método que será chamado ao clicar no botão
+  iniciarQuiz(): void {
+    console.log("Quiz iniciado!");
+    // Adicione aqui a lógica que você deseja ao iniciar o quiz
   }
-}
 
+}

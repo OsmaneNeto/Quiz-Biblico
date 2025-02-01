@@ -1,65 +1,62 @@
-<!-- register.component.html -->
 <div class="register-container">
-    <div class="register-card">
-      <h1>Cadastro</h1>
-    
+  <div class="register-card">
+    <h1>Cadastro</h1>
   
-      <form (ngSubmit)="onSubmit()" #registerForm="">
-        <div class="input-group">
-          <label for="username">Nome de Usuário</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            ngModel
-            required
-            placeholder="Escolha um nome de usuário"
-          />
-        </div>
-  
-        <div class="input-group">
-          <label for="email">E-mail</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            ngModel
-            required
-            placeholder="Digite seu e-mail"
-          />
-        </div>
-  
-        <div class="input-group">
-          <label for="password">Senha</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            ngModel
-            required
-            placeholder="Escolha uma senha"
-          />
-        </div>
-  
-        <div class="input-group">
-          <label for="confirmPassword">Confirmar Senha</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            ngModel
-            required
-            placeholder="Confirme sua senha"
-          />
-        </div>
-  
-        <button class="btn" type="submit" [disabled]="!registerForm">Cadastrar</button>
-      </form>
-  
-      <div class="login-link">
-        <p class="register-link">Já tem uma conta? <a routerLink="/login">Faça login</a></p>    
-        <p class="register-link"><a routerLink="/home">Voltar</a></p>   
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+      <div class="input-group">
+        <label for="username">Nome de Usuário</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          ngModel
+          required
+          placeholder="Escolha um nome de usuário"
+        />
       </div>
+
+      <div class="input-group">
+        <label for="email">E-mail</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          ngModel
+          required
+          placeholder="Digite seu e-mail"
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="password">Senha</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          ngModel
+          required
+          placeholder="Escolha uma senha"
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="confirmPassword">Confirmar Senha</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          ngModel
+          required
+          placeholder="Confirme sua senha"
+        />
+      </div>
+
+      <button class="btn" type="submit" [disabled]="!registerForm.form.valid">Cadastrar</button>
+    </form>
+
+    <div class="login-link">
+      <p class="register-link">Já tem uma conta? <a routerLink="/login">Faça login</a></p>    
+      <p class="register-link"><a routerLink="/home">Voltar</a></p>   
     </div>
   </div>
-  
+</div>
