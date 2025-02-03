@@ -1,7 +1,8 @@
+<!-- register-user.component.html -->
 <div class="register-container">
   <div class="register-card">
     <h1>Cadastro</h1>
-  
+
     <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
       <div class="input-group">
         <label for="username">Nome de Usuário</label>
@@ -9,7 +10,7 @@
           type="text"
           id="username"
           name="username"
-          ngModel
+          [(ngModel)]="username"
           required
           placeholder="Escolha um nome de usuário"
         />
@@ -21,7 +22,7 @@
           type="email"
           id="email"
           name="email"
-          ngModel
+          [(ngModel)]="email"
           required
           placeholder="Digite seu e-mail"
         />
@@ -33,7 +34,7 @@
           type="password"
           id="password"
           name="password"
-          ngModel
+          [(ngModel)]="password"
           required
           placeholder="Escolha uma senha"
         />
@@ -45,7 +46,7 @@
           type="password"
           id="confirmPassword"
           name="confirmPassword"
-          ngModel
+          [(ngModel)]="confirmPassword"
           required
           placeholder="Confirme sua senha"
         />

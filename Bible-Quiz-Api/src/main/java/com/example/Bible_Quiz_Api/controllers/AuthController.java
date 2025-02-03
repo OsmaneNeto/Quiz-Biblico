@@ -22,13 +22,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> registerUser(@Valid @RequestBody UserDto userDto) {
         try {
             UserModel registeredUser = authService.registerUser(userDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Usuário " + registeredUser.getUsername() + " registrado com sucesso!");
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
         } catch (Exception e) {
             e.printStackTrace();  // Exibe o erro no log
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

@@ -1,32 +1,40 @@
-import { Component } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http'; // Importa o HttpClientModule
-import { RouterOutlet } from '@angular/router';
+// app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { IniciarComponent } from './components/iniciar/iniciar.component';
-import { QuizComponent } from './components/quiz/quiz.component';
-import { HomeComponent } from './components/home/home.component';
+import { FormsModule } from '@angular/forms';
+
+import { IniciarModule } from './components/iniciar/niciar.module';
+import { QuizModule } from './components/quiz/quiz.module';
+
 import { RegisterUserComponent } from './components/register-user/register-user.component';
+import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { QuestionsComponent } from './components/questions/questions.component';
+import {  RouterOutlet } from '@angular/router';
 
-@Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    HttpClientModule,
-    RouterModule,
-    // IniciarComponent,
-    // QuizComponent,
-    HomeComponent,
+import { routes } from '../app/app.routes';
+import { AppRoutingModule } from './app-routing.module';
+
+
+@NgModule({
+  declarations: [
     RegisterUserComponent,
-    LoginComponent,    
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    HomeComponent,
+    LoginComponent,
     QuestionsComponent,
+    AppRoutingModule,
     
   ],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  providers: [],
+  bootstrap: [AppComponent]
 })
-export class AppComponent {
-  title = 'Bible-Quiz';
-}
+export class AppModule { }

@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service'; // Certifique-se de importar o AuthService
+import { Router } from '@angular/router'; // Para redirecionar após o cadastro
 
 @Component({
   selector: 'app-register-user',
-  standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],  // Corrigido para ter a declaração única de 'imports'
-  templateUrl: './register-user.component.html',
+  templateUrl: 'register-user.component.html',
   styleUrls: ['./register-user.component.css']
+  
 })
 export class RegisterUserComponent {
   username: string = '';
@@ -16,20 +14,31 @@ export class RegisterUserComponent {
   password: string = '';
   confirmPassword: string = '';
 
+  constructor(private authService: AuthService, private router: Router) {}
+
   onSubmit() {
     if (this.password !== this.confirmPassword) {
-      alert('As senhas não coincidem');
+      alert('As senhas não coincidem.');
       return;
     }
 
-    console.log('Nome de usuário:', this.username);
-    console.log('E-mail:', this.email);
-    console.log('Senha:', this.password);
-    // Aqui você pode adicionar a lógica para enviar os dados ao backend ou algo similar
-  }
+    // Cria o objeto com os dados do usuário
+    const userData = {
+      username: this.username,
+      email: this.email,
+      password: this.password
+    };
 
-  navigateTo(route: string) {
-    // Navegar para a rota desejada
-    // Isso pode ser feito utilizando o Router do Angular
+    // Envia os dados para o serviço de autenticação
+    this.authService.register(userData).subscribe(
+      (response) => {
+        console.log('Usuário registrado com sucesso', response);
+        this.router.navigate(['/login']);  // Redireciona para a página de login após o cadastro
+      },
+      (error) => {
+        console.error('Erro ao registrar usuário', error);
+        alert('Erro ao cadastrar o usuário. Tente novamente.');
+      }
+    );
   }
 }

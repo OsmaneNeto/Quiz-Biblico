@@ -1,10 +1,11 @@
+// quiz.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { QuizComponent } from './quiz.component'; // Importe o componente QuizComponent
+import { QuizComponent } from './quiz.component';
 
 @NgModule({
-  declarations: [QuizComponent],  // Declara o QuizComponent no módulo
-  imports: [CommonModule],  // Certifique-se de incluir CommonModule para recursos básicos
-  exports: [QuizComponent]  // Exporte o QuizComponent para ser usado em outros módulos
+  declarations: [QuizComponent],   // Declare o componente aqui
+  imports: [CommonModule],         // Importe o módulo comum
+  exports: [QuizComponent]         // Exporte o componente, se necessário
 })
 export class QuizModule {}
