@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<UserModel, String> {
 
     // Método customizado para buscar usuário pelo email
     UserModel findByEmail(String email);
+
+
 }

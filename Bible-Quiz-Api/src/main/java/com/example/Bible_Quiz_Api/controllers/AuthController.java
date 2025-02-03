@@ -21,6 +21,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    //Método de cadastro
     @PostMapping("/register")
     public ResponseEntity<UserDto> registerUser(@Valid @RequestBody UserDto userDto) {
         try {
@@ -31,5 +32,29 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    //Método de login
+    @PostMapping("/login")
+    public ResponseEntity<UserDto> loginUser(@RequestBody UserDto userDto) {
+        UserModel user = authService.authenticateUserByEmail(userDto.getEmail(), userDto.getPassword());
+        if (user != null) {
+            String token = generateToken(user);
+            // Retorna o UserDto com os dados do usuário
+            UserDto responseUserDto = new UserDto();
+            responseUserDto.setUsername(user.getUsername());
+            responseUserDto.setEmail(user.getEmail());
+            responseUserDto.setRole(user.getRole());
+            responseUserDto.setToken(token);
+            return ResponseEntity.status(HttpStatus.OK).body(responseUserDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);  // Pode retornar null ou um erro específico
+        }
+    }
+    // Método para gerar um token (exemplo simples)
+    private String generateToken(UserModel user) {
+        // Implemente sua lógica de geração de token aqui
+        return "token"; // Retorne o token gerado
+    }
+
 
 }

@@ -22,14 +22,15 @@ import { AppRoutingModule } from './app-routing.module';
 @NgModule({
   declarations: [
     RegisterUserComponent,
-    AppComponent
+    LoginComponent,
+    AppComponent,
+    
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
     HomeComponent,
-    LoginComponent,
     QuestionsComponent,
     AppRoutingModule,
     

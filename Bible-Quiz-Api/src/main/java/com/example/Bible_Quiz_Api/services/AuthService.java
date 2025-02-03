@@ -18,6 +18,8 @@ public class AuthService {
         this.userRepository = userRepository;
     }
 
+
+    //Cadastrar usuario
     public UserModel registerUser(@RequestBody UserDto userDto) {
         // Verificar se o nome de usuário já existe
         if (userRepository.findByUsername(userDto.getUsername()) != null) {
@@ -48,7 +50,16 @@ public class AuthService {
     }
 
 
+    // Método para autenticar um usuário usando email
+    public UserModel authenticateUserByEmail(String email, String password) {
+        UserModel user = userRepository.findByEmail(email);  // Supondo que você tenha esse método no repositório
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+            return user;  // Retorna o usuário se a senha estiver correta
+        }
+        return null;  // Retorna null se a autenticação falhar
+    }
 
+    //Determina a hierarquia
     private String determineRole(String password) {
         if ("AuxiliarCCB".equals(password)) {
             return "A2";

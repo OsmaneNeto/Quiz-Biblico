@@ -1,22 +1,42 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
-  imports: [FormsModule, CommonModule, RouterModule] // Adicionando o FormsModule
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   email: string = '';
   password: string = '';
+  errorMessage: string = '';
+
+  constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
-    console.log('Email:', this.email);
-    console.log('Senha:', this.password);
-    // Aqui você pode adicionar lógica para autenticar o usuário
+    const credentials = { email: this.email, password: this.password };
+  
+    console.log('Enviando credenciais:', credentials);
+  
+    this.authService.login(credentials).subscribe(
+      (response) => {
+        console.log('Resposta do login:', response);
+        if (response && response.token) {
+          this.authService.saveToken(response.token);
+          this.router.navigate(['/home']);
+        } else {
+          this.errorMessage = 'Credenciais inválidas. Por favor, tente novamente.';
+        }
+      },
+      (error) => {
+        console.error('Erro ao fazer login', error);
+        if (error.status === 401) {
+          this.errorMessage = 'Credenciais inválidas. Por favor, tente novamente.';
+        } else {
+          this.errorMessage = 'Erro ao fazer login. Por favor, tente novamente mais tarde.';
+        }
+      }
+    );
   }
 }

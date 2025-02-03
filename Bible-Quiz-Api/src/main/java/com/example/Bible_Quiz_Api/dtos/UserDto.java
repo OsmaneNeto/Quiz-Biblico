@@ -20,7 +20,18 @@ public class UserDto {
     @Email(message = "Email deve ser válido.")
     private String email;  // Novo campo email
 
+    private String token;
+
     // Getters e Setters
+
+    //Token
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     //Email
 
