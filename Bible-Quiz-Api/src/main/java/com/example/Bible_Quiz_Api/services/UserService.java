@@ -26,7 +26,7 @@ public class UserService {
 
     // Método para autenticar um usuário
     public UserModel authenticateUser(String username, String password) {
-        UserModel user = userRepository.findById(username).orElse(null);
+        UserModel user = userRepository.findById(Long.valueOf(username)).orElse(null);
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             return user;  // Retorna o usuário se a senha estiver correta
         }

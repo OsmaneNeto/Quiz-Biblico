@@ -10,33 +10,38 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   email: string = '';
   password: string = '';
+  isLoading: boolean = false;
   errorMessage: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  onSubmit() {
+  login(): void {
+    this.isLoading = true;
     const credentials = { email: this.email, password: this.password };
-  
-    console.log('Enviando credenciais:', credentials);
-  
+
     this.authService.login(credentials).subscribe(
       (response) => {
-        console.log('Resposta do login:', response);
-        if (response && response.token) {
-          this.authService.saveToken(response.token);
-          this.router.navigate(['/home']);
+        if (response.token) {
+          this.authService.saveToken(response.token);  // Salva o token no localStorage
+          this.router.navigate(['/profile']);  // Navega para o perfil ou a página principal
         } else {
-          this.errorMessage = 'Credenciais inválidas. Por favor, tente novamente.';
+          this.errorMessage = 'Erro ao fazer login. Token não retornado.';
         }
+        this.isLoading = false;
       },
       (error) => {
-        console.error('Erro ao fazer login', error);
+        console.error('Erro ao realizar login:', error);
         if (error.status === 401) {
-          this.errorMessage = 'Credenciais inválidas. Por favor, tente novamente.';
+          this.errorMessage = 'Credenciais inválidas. Tente novamente.';
         } else {
-          this.errorMessage = 'Erro ao fazer login. Por favor, tente novamente mais tarde.';
+          this.errorMessage = 'Ocorreu um erro inesperado. Tente novamente.';
         }
+        this.isLoading = false;
       }
     );
+  }
+
+  onSubmit(): void {
+    this.login();  // Apenas chama o método `login` para evitar duplicação de código
   }
 }
