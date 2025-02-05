@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
   user = {
+    username: '',
     name: '',
     email: '',
   };
@@ -22,11 +23,19 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/change-password']);
   }
 
+  // Lógica para logout
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
       this.authService.getUserProfile().subscribe(
         (userData) => {
-          this.user = userData;
+          this.user.username = userData.username;
+          this.user.name = userData.username;
+          this.user.email = userData.email;
           this.isLoading = false;
         },
         (error) => {
